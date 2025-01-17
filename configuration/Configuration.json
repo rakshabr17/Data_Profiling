@@ -1,0 +1,63 @@
+{
+    "Database1": {
+      "connection_string": "mssql+pyodbc://ASCINLAP60777/AxosZenithMockDatabase?driver=ODBC+Driver+17+for+SQL+Server&Trusted_Connection=yes;",
+      "tables": {
+        "Entitlement": {
+          "columns": [
+            {"ColumnName": "EntitlementId", "DataType": "integer", "GetStats": "YES"},
+            {"ColumnName": "EntitlementTypeId", "DataType": "integer", "GetStats": "YES"},
+            {"ColumnName": "EntitlementGroupId", "DataType": "integer", "GetStats": "YES"},
+            {"ColumnName": "EntitlementName", "DataType": "nvarchar", "GetStats": "YES"},
+            {"ColumnName": "CreatedBy", "DataType": "nvarchar", "GetStats": "NO"},
+            {"ColumnName": "CreatedDate", "DataType": "datetime", "GetStats": "NO"},
+            {"ColumnName": "UpdatedBy", "DataType": "nvarchar", "GetStats": "NO"},
+            {"ColumnName": "UpdatedDate", "DataType": "datetime", "GetStats": "NO"},
+            {"ColumnName": "IsActive", "DataType": "bit", "GetStats": "YES"}
+          ]
+        },
+        "EntitlementType": {
+          "columns": [
+            {"ColumnName": "EntitlementTypeId", "DataType": "integer", "GetStats": "YES"},
+            {"ColumnName": "TypeCode", "DataType": "nvarchar", "GetStats": "YES"},
+            {"ColumnName": "TypeValue", "DataType": "nvarchar", "GetStats": "YES"},
+            {"ColumnName": "CreatedBy", "DataType": "nvarchar", "GetStats": "YES"},
+            {"ColumnName": "CreatedDate", "DataType": "datetime", "GetStats": "YES"},
+            {"ColumnName": "UpdatedBy", "DataType": "nvarchar", "GetStats": "YES"},
+            {"ColumnName": "UpdatedDate", "DataType": "datetime", "GetStats": "YES"},
+            {"ColumnName": "IsActive", "DataType": "bit", "GetStats": "YES"}
+          ]
+        }
+      }
+    },
+    "Database2": {
+      "connection_string": "mssql+pyodbc://ASCINLAP60777/AxosZenithMockDatabase1?driver=ODBC+Driver+17+for+SQL+Server&Trusted_Connection=yes;",
+      "tables": {
+        "Entitlement": {
+          "columns": [
+            {"ColumnName": "EntitlementId", "DataType": "integer", "GetStats": "YES"},
+            {"ColumnName": "EntitlementTypeId", "DataType": "integer", "GetStats": "YES"},
+            {"ColumnName": "EntitlementGroupId", "DataType": "integer", "GetStats": "YES"},
+            {"ColumnName": "EntitlementName", "DataType": "nvarchar", "GetStats": "YES"},
+            {"ColumnName": "CreatedBy", "DataType": "nvarchar", "GetStats": "NO"},
+            {"ColumnName": "CreatedDate", "DataType": "datetime", "GetStats": "NO"},
+            {"ColumnName": "UpdatedBy", "DataType": "nvarchar", "GetStats": "NO"},
+            {"ColumnName": "UpdatedDate", "DataType": "datetime", "GetStats": "NO"},
+            {"ColumnName": "IsActive", "DataType": "bit", "GetStats": "YES"}
+          ]
+        },
+        "EntitlementType": {
+          "columns": [
+            {"ColumnName": "EntitlementTypeId", "DataType": "integer", "GetStats": "YES"},
+            {"ColumnName": "TypeCode", "DataType": "nvarchar", "GetStats": "YES"},
+            {"ColumnName": "TypeValue", "DataType": "nvarchar", "GetStats": "YES"},
+            {"ColumnName": "CreatedBy", "DataType": "nvarchar", "GetStats": "YES"},
+            {"ColumnName": "CreatedDate", "DataType": "datetime", "GetStats": "YES"},
+            {"ColumnName": "UpdatedBy", "DataType": "nvarchar", "GetStats": "YES"},
+            {"ColumnName": "UpdatedDate", "DataType": "datetime", "GetStats": "YES"},
+            {"ColumnName": "IsActive", "DataType": "bit", "GetStats": "YES"}
+          ]
+        }
+      }
+    }
+  }
+  
