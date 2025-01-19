@@ -5,14 +5,18 @@ import logging
 import argparse
 from sqlalchemy import create_engine
 import pandas as pd
+from datetime import datetime
 
-# Configure logging
-LOG_FILE = "script_errors.log"
+# Configure logging with timestamped log files
+date_now = datetime.now().strftime("%d-%m-%Y")
 logging.basicConfig(
-    filename=LOG_FILE,
-    level=logging.DEBUG,  # Set to DEBUG for detailed logs
-    format="%(asctime)s - %(levelname)s - %(message)s"
+    filename=f"Log_Files/Log_Info_{date_now}.log",
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    level=logging.DEBUG,
+    filemode='w',
+    force=True
 )
+logger = logging.getLogger()
 
 # Function to load configuration
 def load_config(config_file):
@@ -20,25 +24,25 @@ def load_config(config_file):
         with open(config_file, 'r') as f:
             return json.load(f)
     except FileNotFoundError:
-        logging.error(f"Configuration file '{config_file}' not found.")
+        logger.error(f"Configuration file '{config_file}' not found.")
         sys.exit(1)
     except json.JSONDecodeError as e:
-        logging.error(f"Invalid JSON format in configuration file. Details: {e}")
+        logger.error(f"Invalid JSON format in configuration file. Details: {e}")
         sys.exit(1)
     except Exception as e:
-        logging.error(f"Unexpected error loading config file: {e}")
+        logger.error(f"Unexpected error loading config file: {e}")
         sys.exit(1)
 
 # Function to connect to SQL Server
 def connect_to_sql_server(connection_string):
     try:
-        logging.info(f"Connecting with connection string: {connection_string}")
+        logger.info(f"Connecting with connection string: {connection_string}")
         engine = create_engine(connection_string)
         connection = engine.connect()
-        logging.info("Connected to SQL Server successfully!")
+        logger.info("Connected to SQL Server successfully!")
         return connection
     except Exception as e:
-        logging.error(f"Error connecting to SQL Server: {e}")
+        logger.error(f"Error connecting to SQL Server: {e}")
         return None
 
 # Function to fetch statistics for specified columns
@@ -50,7 +54,7 @@ def fetch_stats_from_sql(table_name, columns, conn, schema="dbo"):
             row_count = pd.read_sql(row_count_query, conn).iloc[0]["row_count"]
             stats["row_count"] = row_count
         except Exception as e:
-            logging.error(f"Error fetching row count for table '{table_name}': {e}")
+            logger.error(f"Error fetching row count for table '{table_name}': {e}")
             stats["row_count"] = "Error"
 
         for column in columns:
@@ -96,7 +100,7 @@ def fetch_stats_from_sql(table_name, columns, conn, schema="dbo"):
                     FROM {schema}.{table_name}
                     """
                 else:
-                    logging.warning(f"Unsupported data type '{data_type}' for column '{col_name}'. Skipping...")
+                    logger.warning(f"Unsupported data type '{data_type}' for column '{col_name}'. Skipping...")
                     continue
 
                 df = pd.read_sql(query, conn)
@@ -110,15 +114,15 @@ def fetch_stats_from_sql(table_name, columns, conn, schema="dbo"):
                     else:
                         stats[col_name] = df.to_dict(orient="records")
             except Exception as e:
-                logging.error(f"Error executing query for column '{col_name}' in table '{table_name}': {e}")
+                logger.error(f"Error executing query for column '{col_name}' in table '{table_name}': {e}")
     except Exception as e:
-        logging.error(f"Error fetching stats for table '{table_name}': {e}")
+        logger.error(f"Error fetching stats for table '{table_name}': {e}")
     return stats
 
 # Function to write statistics to a .txt file
 def write_stats_to_file(stats, file_path):
     try:
-        logging.info(f"Writing stats to file: {file_path}")
+        logger.info(f"Writing stats to file: {file_path}")
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, 'w') as f:
             for table, table_stats in stats.items():
@@ -141,7 +145,7 @@ def write_stats_to_file(stats, file_path):
                                 f.write(f"  {key}: {value}\n")
                 f.write("\n")
     except Exception as e:
-        logging.error(f"Error writing to file: {e}")
+        logger.error(f"Error writing to file: {e}")
 
 # Function to process a single database
 def process_database(database_name, database_config, output_dir):
@@ -163,7 +167,7 @@ def process_database(database_name, database_config, output_dir):
         write_stats_to_file(stats, output_file)
         conn.close()
     else:
-        logging.error(f"Failed to process database: {database_name}")
+        logger.error(f"Failed to process database: {database_name}")
 
 # Main function
 def main():
@@ -181,7 +185,7 @@ def main():
 
     database_name = args.database_name
     if database_name not in config:
-        logging.error(f"Database '{database_name}' not found in configuration.")
+        logger.error(f"Database '{database_name}' not found in configuration.")
         sys.exit(1)
 
     process_database(database_name, config[database_name], output_dir)
